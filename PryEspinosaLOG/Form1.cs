@@ -7,29 +7,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Data.OleDb;
 
 namespace PryEspinosaLOG
 {
     public partial class mainform : Form
     {
-        clsAccesoBD objAccesoBD;
-
         public mainform()
         {
             InitializeComponent();
             objAccesoBD = new clsAccesoBD();
         }
+        clsAccesoBD objAccesoBD= new clsAccesoBD();
 
         private void mainform_Load(object sender, EventArgs e)
         {
-
+            objAccesoBD.ConectarBaseDatos();
+            lblEstadoConexion.Text = objAccesoBD.EstadoConexion;
+            objAccesoBD.TraerDatos(DataGridViewLOG);
         }
 
         private void btnConectarBase_Click(object sender, EventArgs e)
         {
             objAccesoBD.ConectarBaseDatos();
-
-            lblEstadoConexion.Text = objAccesoBD.EstadoConexion;
         }
 
         private void btnTraerDatos_Click(object sender, EventArgs e)
