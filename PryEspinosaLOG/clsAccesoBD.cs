@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.OleDb;
+using System.Data;
 using System.IO;
 using System.Windows.Forms;
 
@@ -16,6 +17,8 @@ namespace PryEspinosaLOG
         string rutaArchivo;
         OleDbCommand comandoBD;
         OleDbDataReader lectorBD;
+        OleDbDataAdapter adaptadorDS;
+        DataSet objDataSet = new DataSet();
 
         public void ConectarBaseDatos()
         {
@@ -64,6 +67,38 @@ namespace PryEspinosaLOG
             {
                 EstadoConexion = Errores.Message;
             }
+        }
+        public void RegistrarDatosDataSet()
+        {
+            try
+            {
+                comandoBD = new OleDbCommand();
+
+                comandoBD.Connection = conexionBD;
+                comandoBD.CommandType = System.Data.CommandType.TableDirect;
+                comandoBD.CommandText = "Registros";
+
+                adaptadorDS = new OleDbDataAdapter(comandoBD);
+                adaptadorDS.Fill(objDataSet, "Registros");
+
+                DataTable tablaGrabar = objDataSet.Tables["Registros"];
+                DataRow filaGrabar = tablaGrabar.NewRow();
+
+                filaGrabar["Categoria"] = "Carga de datos";
+                filaGrabar["Fecha/Hora"] = DateTime.Now;
+                filaGrabar["Descripcion"] = "Prueba";
+                tablaGrabar.Rows.Add(filaGrabar);
+
+                OleDbCommandBuilder constructor = new OleDbCommandBuilder(adaptadorDS);
+                adaptadorDS.Update(objDataSet, "Registros");
+            }
+            catch (Exception ex)
+            {
+                EstadoConexion = ex.Message;
+
+            }
+
+
         }
     }
 

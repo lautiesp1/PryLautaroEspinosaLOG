@@ -26,6 +26,7 @@ namespace PryEspinosaLOG
             objAccesoBD.ConectarBaseDatos();
             lblEstadoConexion.Text = objAccesoBD.EstadoConexion;
             objAccesoBD.TraerDatos(DataGridViewLOG);
+            objAccesoBD.RegistrarDatosDataSet();
         }
 
         private void btnConectarBase_Click(object sender, EventArgs e)
